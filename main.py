@@ -39,7 +39,7 @@ class Enemy(arcade.Sprite):
             self.center_y -= self.dy
 
         self.center_x += Enemy.dx
-        if random.random() < 0.005 and len(self.enemy_bullet_list) < 8:
+        if random.random() < 0.003 and 5 > len(self.enemy_bullet_list):
             self._shoot()
 
     def _shoot(self):
@@ -98,6 +98,7 @@ class SpaceInvaders(arcade.Window):
         self.score = 0
 
         self.player_sprite = arcade.Sprite("assets/playerShip2_blue.png", SPRITE_SCALING_PLAYER)
+        self.player_sprite.dx = 0
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 25
         self.player_list.append(self.player_sprite)
@@ -134,6 +135,13 @@ class SpaceInvaders(arcade.Window):
             self._shoot()
         if key == arcade.key.ESCAPE:
             exit()
+        if key == arcade.key.MOTION_RIGHT:
+            self.player_sprite.dx = 6
+        if key == arcade.key.MOTION_LEFT:
+            self.player_sprite.dx -= 6
+
+    def on_key_release(self, symbol: int, modifiers: int):
+        self.player_sprite.dx = 0
 
     def _shoot(self):
         if len(self.bullet_list) <= 1:
@@ -167,6 +175,7 @@ class SpaceInvaders(arcade.Window):
 
             for player in hit_list:
                 player.kill()
+        self.player_sprite.center_x += self.player_sprite.dx
 
 
 def main():
