@@ -2,23 +2,23 @@ import random
 
 import arcade
 
-SPRITE_SCALING_PLAYER = 0.5
-SPRITE_SCALING_ENEMY = 0.5
-SPRITE_SCALING_LASER = 0.5
+SPRITE_SCALING_PLAYER = 0.4
+SPRITE_SCALING_ENEMY = 0.4
+SPRITE_SCALING_LASER = 0.4
 
 ENEMY_COUNT = 24
 ENEMY_COLS = 6
 ENEMY_SCALING_LASER = 0.4
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 960
+SCREEN_HEIGHT = 720
 
 BULLET_SPEED = 5
 
 
 class Enemy(arcade.Sprite):
 
-    dx = 4
+    dx = 2.5
 
     def __init__(self, enemy_bullet_list):
         self.dx = Enemy.dx
@@ -109,8 +109,8 @@ class SpaceInvaders(arcade.Window):
 
             enemy = Enemy(self.enemy_bullet_list)
 
-            enemy.center_x = 30 + current_col * 75
-            enemy.center_y = SCREEN_HEIGHT - (30 + current_row * 50)
+            enemy.center_x = 50 + current_col * 85
+            enemy.center_y = SCREEN_HEIGHT - (35 + current_row * 60)
 
             self.enemy_list.append(enemy)
 
