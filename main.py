@@ -5,6 +5,7 @@ import arcade
 SPRITE_SCALING_PLAYER = 0.4
 SPRITE_SCALING_ENEMY = 0.4
 SPRITE_SCALING_LASER = 0.4
+PLAYER_COUNT = 3
 
 ENEMY_COUNT = 24
 ENEMY_COLS = 6
@@ -13,7 +14,7 @@ ENEMY_SCALING_LASER = 0.4
 SCREEN_WIDTH = 960
 SCREEN_HEIGHT = 720
 
-BULLET_SPEED = 5
+BULLET_SPEED = 10
 
 
 class Enemy(arcade.Sprite):
@@ -39,7 +40,7 @@ class Enemy(arcade.Sprite):
             self.center_y -= self.dy
 
         self.center_x += Enemy.dx
-        if random.random() < 0.003 and 5 > len(self.enemy_bullet_list):
+        if random.random() < 0.01 and 5 > len(self.enemy_bullet_list):
             self._shoot()
 
     def _shoot(self):
@@ -58,7 +59,7 @@ class Bullet(arcade.Sprite):
         super().__init__("assets/laserBlue01.png", SPRITE_SCALING_LASER)
 
     def update(self):
-        self.center_y += 5
+        self.center_y += BULLET_SPEED
         if self.bottom > SCREEN_HEIGHT:
             self.kill()
 
@@ -99,9 +100,15 @@ class SpaceInvaders(arcade.Window):
 
         self.player_sprite = arcade.Sprite("assets/playerShip2_blue.png", SPRITE_SCALING_PLAYER)
         self.player_sprite.dx = 0
-        self.player_sprite.center_x = 50
+        self.player_sprite.center_x = 480
         self.player_sprite.center_y = 25
         self.player_list.append(self.player_sprite)
+        for n in range(PLAYER_COUNT - 1):
+            extra_life = arcade.Sprite("assets/playerShip2_blue.png", SPRITE_SCALING_PLAYER)
+            extra_life.dx = 0
+            extra_life.center_x = SCREEN_WIDTH - n * 30 - 30
+            extra_life.center_y = SCREEN_HEIGHT - 20
+            self.player_list.append(extra_life)
 
         for i in range(ENEMY_COUNT):
             current_row = i // ENEMY_COLS
@@ -110,7 +117,7 @@ class SpaceInvaders(arcade.Window):
             enemy = Enemy(self.enemy_bullet_list)
 
             enemy.center_x = 50 + current_col * 85
-            enemy.center_y = SCREEN_HEIGHT - (35 + current_row * 60)
+            enemy.center_y = SCREEN_HEIGHT - (45 + current_row * 60)
 
             self.enemy_list.append(enemy)
 
@@ -175,6 +182,14 @@ class SpaceInvaders(arcade.Window):
 
             for player in hit_list:
                 player.kill()
+                if self.player_list:
+                    self.player_sprite = self.player_list[-1]
+                    self.player_sprite.center_x = 50
+                    self.player_sprite.center_y = 25
+                    self.player_sprite.scale *= 2
+                else:
+                    print("GAME OVER")
+                    arcade.draw_text(f"GAME OVER", SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/2, arcade.color.WHITE, 50)
         self.player_sprite.center_x += self.player_sprite.dx
 
 
